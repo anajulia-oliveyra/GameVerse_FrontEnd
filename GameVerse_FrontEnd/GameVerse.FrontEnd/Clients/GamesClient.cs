@@ -1,7 +1,7 @@
 using GameVerse.FrontEnd.Models;
 
 namespace GameVerse.FrontEnd.Clients;
-
+//teste teste
 public class GamesClient
 {
     private readonly List<GameSummary> games =
