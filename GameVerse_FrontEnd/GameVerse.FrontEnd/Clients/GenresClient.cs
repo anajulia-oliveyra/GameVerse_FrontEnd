@@ -33,4 +33,6 @@ public class GenresClient
             Name = "Adventure"
         }
     ];
+
+    public Genre[] GetGenres() => genres;
 }
