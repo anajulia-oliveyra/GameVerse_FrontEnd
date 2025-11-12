@@ -1,11 +1,9 @@
 @page "/editgame"
-@using GameVerse.FrontEnd.Clients
-@using GameVerse.FrontEnd.Models
 
 <PageTitle>New Game</PageTitle>
 <h3>New Game</h3>
 
-@if(Genre is null){
+@if(genres is null){
   <p><em> Loading...</em></p>
 }
 else{
