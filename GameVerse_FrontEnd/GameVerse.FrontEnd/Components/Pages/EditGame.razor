@@ -5,6 +5,10 @@
 <PageTitle>New Game</PageTitle>
 <h3>New Game</h3>
 
+@if(Genre is null){
+  <p><em> Loading...</em></p>
+}
+else{
 <div class="row">
       <div class="col-md-4">
 <EditForm Model="@game" FormName="editGame">
@@ -33,6 +37,7 @@
 </EditForm>
 </div>
 </div>
+}
 
 @code{
     private GameDetails game{get;set;} = new(){
