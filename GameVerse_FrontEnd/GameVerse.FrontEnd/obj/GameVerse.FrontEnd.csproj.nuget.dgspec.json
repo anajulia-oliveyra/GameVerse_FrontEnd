@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fhdd\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj": {}
+    "C:\\Users\\user\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fhdd\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj": {
+    "C:\\Users\\user\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fhdd\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj",
         "projectName": "GameVerse.FrontEnd",
-        "projectPath": "C:\\Users\\fhdd\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj",
-        "packagesPath": "C:\\Users\\fhdd\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fhdd\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\obj\\",
+        "projectPath": "C:\\Users\\user\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\GameVerse.FrontEnd.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Documents\\GitHub\\GameVerse_FrontEnd\\GameVerse_FrontEnd\\GameVerse.FrontEnd\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\fhdd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -62,13 +62,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.22, )",
+              "version": "[8.0.21, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.11, )",
+              "version": "[9.0.10, )",
               "autoReferenced": true
             }
           },
@@ -88,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
