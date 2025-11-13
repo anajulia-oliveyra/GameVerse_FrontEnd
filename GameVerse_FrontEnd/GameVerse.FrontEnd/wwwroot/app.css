@@ -1,3 +1,29 @@
+/* ====== Cores da identidade ====== */
+
+:root {
+    --primary-color: #182C61; /* Ending Navy Blue */
+    --secondary-color: #FC427B; /* Sasquatch Socks */
+    --neutral-light: #CAD3C8; /* Falling Star */
+    --neutral-dark: #2C3A47; /*Ship's Officer*/
+
+    --accent-blue: #3B3B98; /* Bluebell */
+    --accent-green: #58B19F; /* Keppel */
+    --accent-yellow: #EAB543; /* Honey Glow */
+    --alert-magenta: #B33771; /* Fiery Fuchsia */
+    --highlight-green: #9AECDB; /* Oasis Stream */
+    --support-purple: #6D214F; /* Magenta Purple */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--neutral-dark);
+    color: var(--neutral-light);
+}
+
+h1, h2, h3, .brand-name {
+    font-family: 'Exo 2', sans-serif;
+}
+
 h1:focus {
     outline: none;
 }
