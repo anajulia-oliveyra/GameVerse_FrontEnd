@@ -1,3 +1,4 @@
+using GameVerse.FrontEnd.Clients;
 using GameVerse.FrontEnd.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,6 +14,7 @@ namespace GameVerse.FrontEnd
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddSingleton<GamesClient>();
 
             await builder.Build().RunAsync();
         }

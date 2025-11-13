@@ -53,22 +53,22 @@ public class GamesClient
     public GameSummary[] GetGames() => games.ToArray();
 
     public void addGame(GameDetails game)
+{
+    if (string.IsNullOrWhiteSpace(game.GenreId))
+        throw new ArgumentException("GenreId não pode ser nulo ou vazio.");
+
+    var genre = genres.Single(g => g.Id == int.Parse(game.GenreId));
+
+    var gameSummary = new GameSummary
     {
+        Id = games.Count + 1,
+        Name = game.Name,
+        Genre = genre.Name,
+        Price = game.Price,
+        ReleaseDate = game.ReleaseDate
+    };
 
-        ArgumentException.ThrowIfNullOrWhiteSpace(game.GenreId);
+    games.Add(gameSummary);
+}
 
-        var genre = genres.Single(genre => genre.Id == int.Parse(game.GenreId));
-
-        var gameSummary = new GameSummary
-        {
-            Id = games.Count + 1,
-            Name = game.Name,
-            Genre = game.Name,
-            Price = game.Price,
-            ReleaseDate = game.ReleaseDate
-
-        };
-
-        games.Add(gameSummary);
-    }
 }
