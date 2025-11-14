@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GameVerse.FrontEnd",
   "resources": {
-    "hash": "sha256-vIIPlPyk45yGnlreqD8qO/2LX0Xu91ZIX9AAtCQ496A=",
+    "hash": "sha256-fPvzhn04kqIvCMxkRmQ3+h25hU4vAOKNWIh8X8z6qj4=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-NAeH6eI8WKTOYuQTKTPVx9bVqaJMnlmlc9SFJ5uqwbQ="
     },
@@ -9,7 +9,7 @@
       "dotnet.runtime.js": "sha256-6bV/iAemowb59rmItegP8VsxwWpWUNyMb0Q76Fvvsjo="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-yyb2pM6Gf5qeoeEjh34ECcyvTJhWbiSOb05RdWYMtD4="
+      "dotnet.native.wasm": "sha256-FpmmIUXH36dv3wVV6aUiGFV5u3ooV2DvLyw+OXBl+Z0="
     },
     "icu": {
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
@@ -58,7 +58,7 @@
       "System.Text.RegularExpressions.wasm": "sha256-Ukj7tVGZb/g+WTwwSJGqzhOVN+1qqhZR6Xaak9GMX5U=",
       "System.wasm": "sha256-I4hhyMuUoHdrzDopL9tlnkL/Skg+0OO+gmkOXNT3dcg=",
       "System.Private.CoreLib.wasm": "sha256-hWaWj6hcDroYk2CwE+5AgUs86P3rHLQv+cy/ggWJv0E=",
-      "GameVerse.FrontEnd.wasm": "sha256-g2f2U0jGMNZo1kosIgkwVLFNdXVJ5pIUFz7MwB6Z2VY="
+      "GameVerse.FrontEnd.wasm": "sha256-JgfaQShepuBqhmfjwQLLOspCsS/0jxV/XAZqXYn7bN4="
     }
   },
   "cacheBootResources": true,
