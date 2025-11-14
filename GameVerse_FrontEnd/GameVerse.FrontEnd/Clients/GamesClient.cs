@@ -50,6 +50,26 @@ public class GamesClient
 
     private readonly Genre[] genres = new GenresClient().GetGenres();
 
+    private readonly List<int> purchasedGameIds = new();
+
+    public void BuyGame(int gameId)
+    {
+        var game = games.SingleOrDefault(g => g.Id == gameId);
+        if (game == null)
+            throw new ArgumentException("Jogo não encontrado.");
+
+        if (purchasedGameIds.Contains(gameId))
+            throw new InvalidOperationException("Jogo já comprado.");
+
+        purchasedGameIds.Add(gameId);
+        Console.WriteLine($"Jogo comprado: {game.Name} por {game.Price:C2}");
+    }
+
+    public GameSummary[] GetPurchasedGames()
+    {
+        return games.Where(g => purchasedGameIds.Contains(g.Id)).ToArray();
+    }
+
     public GameSummary[] GetGames() => games.ToArray();
 
     public void addGame(GameDetails game)

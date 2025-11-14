@@ -25,17 +25,27 @@ else {
         </tr>
     </thead>
     <tbody>
-        @foreach (var game in games){
-            <tr>
-                <td>@game.Id</td>
-                <td>@game.Name</td>
-                <td>@game.Genre</td>
-                <td class="text-end">@game.Price.ToString("C2")</td>
-                <td>@game.ReleaseDate</td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
+    @foreach (var game in games)
+    {
+        <tr>
+            <td>@game.Id</td>
+            <td>@game.Name</td>
+            <td>@game.Genre</td>
+            <td class="text-end">@game.Price.ToString("C2")</td>
+            <td>@game.ReleaseDate</td>
+            <td>
+                @if (Client.GetPurchasedGames().Any(g => g.Id == game.Id))
+                {
+                    <span class="badge bg-success">Comprado</span>
+                }
+                else
+                {
+                    <a class="btn btn-success btn-sm" href="/purchase/@game.Id">Comprar</a>
+                }
+            </td>
+        </tr>
+    }
+</tbody>
 </table>
 }
 
