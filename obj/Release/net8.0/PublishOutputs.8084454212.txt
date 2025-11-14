@@ -1,4 +1,0 @@
-C:\Users\fhdd\Documents\GitHub\GameVerse_FrontEnd\obj\Release\net8.0\browser-wasm\PubTmp\Out\appsettings.Development.json
-C:\Users\fhdd\Documents\GitHub\GameVerse_FrontEnd\obj\Release\net8.0\browser-wasm\PubTmp\Out\appsettings.json
-C:\Users\fhdd\Documents\GitHub\GameVerse_FrontEnd\obj\Release\net8.0\browser-wasm\PubTmp\Out\emcc-props.json
-C:\Users\fhdd\Documents\GitHub\GameVerse_FrontEnd\obj\Release\net8.0\browser-wasm\PubTmp\Out\web.config
