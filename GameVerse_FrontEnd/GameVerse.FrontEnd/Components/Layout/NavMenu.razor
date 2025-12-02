@@ -4,7 +4,7 @@
 
 <nav class="navbar bg-body-tertiary" data-bs-theme="dark">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
+        <a class="navbar-brand d-flex align-items-center" href="">
             <img src="/images/Logo_NoBackground.png" alt="GameVerse Logo" width="40" height="40" class="me-2">
             <span>GameVerse</span>
         </a>
@@ -13,16 +13,16 @@
             <AuthorizeView>
             <Authorized>
                 <button class="btn btn-outline-light me-2" @onclick="Logout">Sair</button>
-                <a class="btn btn-outline-light me-2" href="/user/games">Meus jogos</a>
+                <a class="btn btn-outline-light me-2" href="user/games">Meus jogos</a>
             </Authorized>
             <NotAuthorized>
-                <a class="btn btn-success me-2" href="/login">Login</a>
-                <a class="btn btn-success me-2" href="/signup">Criar Conta</a>
+                <a class="btn btn-success me-2" href="login">Login</a>
+                <a class="btn btn-success me-2" href="signup">Criar Conta</a>
             </NotAuthorized>
             </AuthorizeView>
 
             <AuthorizeView Roles="Admin">
-            <a class="btn btn-primary" href="/games">Administrador</a>
+            <a class="btn btn-primary" href="games">Administrador</a>
             </AuthorizeView>
         </div>
     </div>
