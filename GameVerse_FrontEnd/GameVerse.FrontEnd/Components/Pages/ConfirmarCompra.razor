@@ -1,9 +1,6 @@
 ﻿@page "/confirmar/{id:int}"
 @using GameVerse.FrontEnd.Models
-@using GameVerse.FrontEnd.Clients
-
 @inject GamesClient GameService
-@inject PaymentService PaymentService
 @inject NavigationManager Nav
 
 <h1>Confirmar Compra</h1>
@@ -16,7 +13,7 @@ else
 {
     <div class="card p-4">
         <p><strong>Jogo:</strong> @game.Name</p>
-        <p><strong>Preço:</strong> R$ @game.Price</p>
+        <p><strong>Preço:</strong> @game.Price.ToString("C2")</p>
 
         @if (!processing)
         {
@@ -30,40 +27,40 @@ else
         }
         else
         {
-            <p>Processando pagamento...</p>
+            <p>Processando...</p>
         }
     </div>
 }
 
 @code {
-    GameSummary? game;
-    bool processing = false;
+    private GameSummary? game;
+    private bool processing = false;
 
     [Parameter]
     public int id { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        game = GameService.GetById(id);
+        game = await GameService.GetByIdAsync(id);
     }
 
-    async Task OnConfirmarCompra()
+    private Task Cancelar()
     {
+        Nav.NavigateTo("/");
+        return Task.CompletedTask;
+    }
+
+    private async Task OnConfirmarCompra()
+    {
+        if (game is null)
+            return;
+
         processing = true;
 
-        var purchase = new Purchase
-        {
-            GameId = game.Id,
-            GameName = game.Name,
-            Price = game.Price,
-            UserEmail = "teste@email.com"
-        };
+        GameService.BuyGame(game);
 
-        var result = await PaymentService.ProcessPayment(purchase);
+        await Task.Delay(500); // só pra simular
 
-        if (result)
-            Nav.NavigateTo("/compra-sucesso", true);
+        Nav.NavigateTo("/compra-sucesso", true);
     }
-
-    void Cancelar() => Nav.NavigateTo("/");
 }

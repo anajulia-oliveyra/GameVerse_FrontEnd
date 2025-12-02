@@ -14,7 +14,7 @@ else
         <p><strong>Jogo:</strong> @game.Name</p>
         <p><strong>Preço:</strong> @game.Price.ToString("C2")</p>
 
-        <button class="btn btn-primary" @onclick="BuyGame">Confirmar compra</button>
+        <button class="btn btn-primary" @onclick="BuyGameAsync">Confirmar compra</button>
         <button class="btn btn-secondary ms-2" @onclick="GoBack">Cancelar</button>
     </div>
 }
@@ -23,15 +23,17 @@ else
     [Parameter] public int id { get; set; }
     private GameSummary? game;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        game = Client.GetGames().SingleOrDefault(g => g.Id == id);
+        var games = await Client.GetGamesAsync();
+        game = games?.SingleOrDefault(g => g.Id == id);
     }
 
-    private void BuyGame()
+    private async Task BuyGameAsync()
     {
-        Client.BuyGame(id);
-        Nav.NavigateTo("/", true); // volta para Home após compra
+        // falta implementar BuyGameAsync no GamesClient
+        // então aqui fica vazio enquanto você cria
+        Nav.NavigateTo("/", true);
     }
 
     private void GoBack()
@@ -39,4 +41,3 @@ else
         Nav.NavigateTo("/");
     }
 }
-y
