@@ -1,4 +1,4 @@
-
+using GameVerse.FrontEnd.Services;
 using GameVerse.FrontEnd.Clients;
 using GameVerse.FrontEnd.Components;
 using GameVerse.FrontEnd.Handlers;
@@ -6,6 +6,7 @@ using GameVerse.FrontEnd.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace GameVerse.FrontEnd
 {
@@ -24,6 +25,9 @@ namespace GameVerse.FrontEnd
             
             builder.Services.AddSingleton<LocalStorageService>(); 
             builder.Services.AddScoped<AuthHeaderHandler>(); 
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+
 
         
             builder.Services.AddHttpClient<GamesClient>()

@@ -1,0 +1,129 @@
+@page "/games/create"
+@attribute [Authorize(Roles = "admin")]
+@using GameVerse.FrontEnd.Models
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+@inject GamesClient GamesClient
+@inject GenresClient GenresClient
+
+<PageTitle>Novo Jogo</PageTitle>
+<h3>Criar Novo Jogo</h3>
+
+@if(genres is null)
+{
+  <p class="alert alert-info"><em>Carregando gêneros...</em></p>
+}
+else
+{
+<div class="row">
+    <div class="col-md-6">
+        <EditForm Model="@game" FormName="createGame" OnValidSubmit="HandleSubmitAsync">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome:</label>
+                <InputText id="name" @bind-Value="game.Name" class="form-control" />
+                <ValidationMessage For="() => game.Name" />
+            </div>
+            
+            <div class="mb-3">
+                <label for="genre" class="form-label">Gênero:</label>
+                <InputSelect id="genre" @bind-Value="game.GenreId" class="form-select">
+                    <option value="">Selecione um Gênero</option>
+                    @foreach (var genre in genres)
+                    {
+                        <option value="@genre.Id">@genre.Name</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="() => game.GenreId" />
+            </div>
+            
+            <div class="mb-3">
+                <label for="price" class="form-label">Preço:</label>
+                <InputNumber id="price" @bind-Value="game.Price" class="form-control" />
+                <ValidationMessage For="() => game.Price" />
+            </div>
+            
+            <div class="mb-3">
+                <label for="releaseDate" class="form-label">Data de Lançamento:</label>
+                <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control" />
+                <ValidationMessage For="() => game.ReleaseDate" />
+            </div>
+            
+            <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                @if (isSubmitting)
+                {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    Salvando...
+                }
+                else
+                {
+                    <span>Salvar</span>
+                }
+            </button>
+            <a role="button" class="btn btn-secondary" href="/games">Cancelar</a>
+        </EditForm>
+    </div>
+</div>
+}
+
+@code{
+
+    [SupplyParameterFromForm]
+    private GameDetails game {get;set;} = new(){
+        Id = 0, 
+        Name = string.Empty,
+        GenreId = string.Empty, 
+        Price = 0,
+        ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
+    };
+    private record Genre(int Id, string Name);
+    private List<Genre>? genres;
+    private string? errorMessage;
+    private bool isSubmitting = false;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            genres = new List<Genre>
+            {
+                new(1, "Platform"),
+                new(2, "Open World"),
+                new(3, "RPG")
+            };
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Erro ao carregar gêneros: {ex.Message}";
+        }
+    }
+    private async Task HandleSubmitAsync()
+    {
+        isSubmitting = true;
+        errorMessage = null;
+
+        try
+        {
+            await GamesClient.CreateGameAsync(game);
+            NavigationManager.NavigateTo("/games");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden || ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            errorMessage = "Você não tem permissão para criar jogos (Acesso restrito ao Administrador).";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Falha ao criar o jogo. Verifique os dados e tente novamente. Detalhe: {ex.Message}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}

@@ -1,0 +1,115 @@
+@page "/games"
+@using GameVerse.FrontEnd.Clients
+@using GameVerse.FrontEnd.Models
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.JSInterop
+@inject GamesClient GamesClient
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Catálogo de Jogos</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Catálogo de Jogos</h2>
+    
+    <AuthorizeView Roles="Admin">
+        <button class="btn btn-primary" @onclick="NavigateToCreate">
+            <i class="bi bi-plus-circle-fill"></i> Novo Jogo
+        </button>
+    </AuthorizeView>
+</div>
+
+@if (games == null)
+{
+    <div class="alert alert-info">Carregando jogos... <span class="spinner-border spinner-border-sm"></span></div>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger">Erro ao carregar os jogos: @errorMessage</div>
+}
+else if (!games.Any())
+{
+    <div class="alert alert-warning">Nenhum jogo encontrado no catálogo.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Gênero</th>
+                <th>Preço</th>
+                <th>Lançamento</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in games)
+            {
+                <tr>
+                    <td>@game.Id</td>
+                    <td>@game.Name</td>
+                    <td>@game.Genre</td>
+                    <td>@game.Price.ToString("C2")</td> 
+                    <td>@game.ReleaseDate.ToString("yyyy/MM/dd")</td>
+                    <td>
+                        <AuthorizeView Roles="Admin">
+                            <button class="btn btn-sm btn-info me-2" @onclick="() => NavigateToEdit(game.Id)">Editar</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteGame(game.Id, game.Name)">Excluir</button>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<GameSummary>? games;
+    private string? errorMessage;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await GamesClient.GetGamesAsync();
+            games = result ?? new List<GameSummary>();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Falha ao buscar a lista de jogos: {ex.Message}";
+        }
+    }
+
+    private void NavigateToCreate()
+    {
+        NavigationManager.NavigateTo("/games/create");
+    }
+
+    private void NavigateToEdit(int id)
+    {
+        NavigationManager.NavigateTo($"/games/edit/{id}");
+    }
+    private async Task DeleteGame(int id, string name)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Tem certeza que deseja excluir o jogo '{name}'?"))
+        {
+            return;
+        }
+
+        try
+        {
+            await GamesClient.DeleteGameAsync(id);
+            games = games?.Where(g => g.Id != id).ToList();
+            StateHasChanged(); 
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden || ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        {
+            errorMessage = "Acesso Negado: Você não tem permissão para excluir jogos.";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Erro ao tentar deletar o jogo: {ex.Message}";
+        }
+    }
+}
