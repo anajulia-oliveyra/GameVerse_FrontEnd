@@ -1,5 +1,6 @@
 @page "/games/create"
-@attribute [Authorize(Roles = "admin")]
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
 @using GameVerse.FrontEnd.Models
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
