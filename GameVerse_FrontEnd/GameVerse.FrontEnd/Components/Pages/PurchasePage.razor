@@ -1,0 +1,42 @@
+@page "/purchase/{id:int}"
+@inject GamesClient Client
+@inject NavigationManager Nav
+
+<h3>Confirmar Compra</h3>
+
+@if (game == null)
+{
+    <p><em>Carregando jogo...</em></p>
+}
+else
+{
+    <div class="card p-3">
+        <p><strong>Jogo:</strong> @game.Name</p>
+        <p><strong>Preço:</strong> @game.Price.ToString("C2")</p>
+
+        <button class="btn btn-primary" @onclick="BuyGame">Confirmar compra</button>
+        <button class="btn btn-secondary ms-2" @onclick="GoBack">Cancelar</button>
+    </div>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private GameSummary? game;
+
+    protected override void OnInitialized()
+    {
+        game = Client.GetGames().SingleOrDefault(g => g.Id == id);
+    }
+
+    private void BuyGame()
+    {
+        Client.BuyGame(id);
+        Nav.NavigateTo("/", true); // volta para Home após compra
+    }
+
+    private void GoBack()
+    {
+        Nav.NavigateTo("/");
+    }
+}
+y
