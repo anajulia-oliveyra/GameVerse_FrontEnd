@@ -10,6 +10,8 @@
     <AuthorizeView>
         <Authorized>
             <a class="btn btn-secondary" @onclick="Logout">Sair</a>
+            <a class="btn btn-secondary" href="/user/games">Meus jogos</a>
+
         </Authorized>
         <NotAuthorized>
             <a class="btn btn-success" href="/login">Login</a>
@@ -22,7 +24,7 @@
     </AuthorizeView>
 </div>
 
-@if (games == null)
+@if (games == null || purchasedGames == null)
 {
     <p><em>Carregando...</em></p>
 }
@@ -40,35 +42,45 @@ else
         </thead>
 
         <tbody>
-        @foreach (var game in games)
-        {
-            <tr>
-                <td>@game.Id</td>
-                <td>@game.Name</td>
-                <td>@game.Description</td>
-                <td class="text-end">@game.Price.ToString("C2")</td>
-                <td>
-                    @if (Client.GetPurchasedGames().Any(g => g.Id == game.Id))
-                    {
-                        <span class="badge bg-success">Comprado</span>
-                    }
-                    else
-                    {
-                        <a class="btn btn-success btn-sm" href="/confirmar/@game.Id">Comprar</a>
-                    }
-                </td>
-            </tr>
-        }
+            @foreach (var game in games)
+            {
+                <tr>
+                    <td>@game.Id</td>
+                    <td>@game.Name</td>
+                    <td>@game.Description</td>
+                    <td class="text-end">@game.Price.ToString("C2")</td>
+                    <td>
+                        @if (purchasedGames.Any(g => g.Id == game.Id))
+                        {
+                            <span class="badge bg-success">Comprado</span>
+                        }
+                        else
+                        {
+                            <a class="btn btn-success btn-sm" href="/confirmar/@game.Id">Comprar</a>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }
 
 @code {
     private List<GameSummary>? games;
+    private List<GameSummary> purchasedGames = new();
 
     protected override async Task OnInitializedAsync()
     {
         games = await Client.GetGamesAsync();
+
+        try
+        {
+            purchasedGames = await Client.GetUserGamesAsync();
+        }
+        catch
+        {
+            purchasedGames = new List<GameSummary>();
+        }
     }
 
     private async Task Logout()

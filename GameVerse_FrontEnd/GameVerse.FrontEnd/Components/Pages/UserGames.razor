@@ -1,0 +1,57 @@
+﻿@page "/user/games"
+@inject GamesClient Client
+@inject NavigationManager Navigation
+@using GameVerse.FrontEnd.Models
+
+<h3>Meus Jogos</h3>
+
+@if (games == null)
+{
+    <p>Carregando...</p>
+}
+else if (!games.Any())
+{
+    <p>Você não possui jogos cadastrados.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var game in games)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                @game.Name
+                <button class="btn btn-danger btn-sm" @onclick="() => RemoveGame(game.Id)">Remover</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<GameSummary>? games;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            games = await Client.GetUserGamesAsync();
+        }
+        catch
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+
+    private async Task RemoveGame(int gameId)
+    {
+        try
+        {
+            await Client.RemoveUserGameAsync(gameId);
+            games?.RemoveAll(g => g.Id == gameId);
+            StateHasChanged();
+        }
+        catch
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

@@ -7,8 +7,7 @@ namespace GameVerse.FrontEnd.Clients
     {
         private readonly HttpClient _httpClient;
         private const string BaseUrl = "games";
-
-        private List<GameSummary> _purchased = new();
+        private const string UserGamesUrl = "user/games";
 
         public GamesClient(HttpClient httpClient)
         {
@@ -49,12 +48,26 @@ namespace GameVerse.FrontEnd.Clients
             return await _httpClient.GetFromJsonAsync<GameSummary>($"{BaseUrl}/{id}");
         }
 
-        public List<GameSummary> GetPurchasedGames() => _purchased;
+        // -------------------- User Games --------------------
 
-        public void BuyGame(GameSummary game)
+        public async Task<List<GameSummary>> GetUserGamesAsync(string? targetUserId = null)
         {
-            if (!_purchased.Any(g => g.Id == game.Id))
-                _purchased.Add(game);
+            string url = targetUserId != null ? $"{UserGamesUrl}/{targetUserId}" : UserGamesUrl;
+            return await _httpClient.GetFromJsonAsync<List<GameSummary>>(url)
+                   ?? new List<GameSummary>();
+        }
+
+        public async Task BuyGame(int gameId)
+        {
+            var content = new { GameId = gameId };
+            var response = await _httpClient.PostAsJsonAsync(UserGamesUrl, content);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RemoveUserGameAsync(int gameId)
+        {
+            var response = await _httpClient.DeleteAsync($"{UserGamesUrl}/{gameId}");
+            response.EnsureSuccessStatusCode();
         }
     }
 }

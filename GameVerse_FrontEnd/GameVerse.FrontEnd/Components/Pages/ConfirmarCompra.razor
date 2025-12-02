@@ -57,9 +57,7 @@ else
 
         processing = true;
 
-        GameService.BuyGame(game);
-
-        await Task.Delay(500); // só pra simular
+        await GameService.BuyGame(game.Id);
 
         Nav.NavigateTo("/compra-sucesso", true);
     }
