@@ -1,0 +1,98 @@
+@page "/login"
+@using System.ComponentModel.DataAnnotations
+@using GameVerse.FrontEnd.Clients 
+@using Microsoft.AspNetCore.Components.Routing // Necessário para NavigationManager
+@inject AuthClient AuthClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login de Usuário</PageTitle>
+
+<div class="card shadow-sm">
+    <h4 class="card-header bg-primary text-white">Entrar</h4>
+    <div class="card-body">
+        <EditForm Model="@formData" FormName="LoginForm" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <InputText id="email" @bind-Value="formData.Email" placeholder="seu@email.com" type="email" class="form-control" />
+                <ValidationMessage For="() => formData.Email" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="password">Senha</label>
+                <InputText id="password" @bind-Value="formData.Password" placeholder="********" type="password" class="form-control" />
+                <ValidationMessage For="() => formData.Password" class="text-danger" />
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success" disabled="@isSubmitting">
+                    @if (isSubmitting)
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Aguarde
+                    }
+                    else
+                    {
+                        <span>Entrar</span>
+                    }
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(feedbackMessage))
+            {
+                <div class="@feedbackCssClass mt-3">@feedbackMessage</div>
+            }
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private LoginFormData formData = new();
+    private bool isSubmitting = false;
+    private string feedbackMessage = string.Empty;
+    private string feedbackCssClass = string.Empty;
+
+    private class LoginFormData
+    {
+        [Required(ErrorMessage = "O email é obrigatório.")]
+        [EmailAddress(ErrorMessage = "Formato de email inválido.")]
+        public string Email { get; set; } = "";
+
+        [Required(ErrorMessage = "A senha é obrigatória.")]
+        public string Password { get; set; } = "";
+    }
+
+    private async Task HandleLogin()
+    {
+        isSubmitting = true;
+        feedbackMessage = string.Empty;
+        feedbackCssClass = string.Empty;
+
+        try
+        {
+            var response = await AuthClient.LoginAsync(formData.Email, formData.Password);
+
+            feedbackMessage = "Login realizado com sucesso! Acesso concedido. Redirecionando...";
+            feedbackCssClass = "alert alert-success";
+
+            await Task.Delay(1500);
+            
+            NavigationManager.NavigateTo("/"); 
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized || ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
+        {
+            feedbackMessage = "Credenciais inválidas. Verifique seu email e senha.";
+            feedbackCssClass = "alert alert-danger";
+        }
+        catch (Exception)
+        {
+            feedbackMessage = $"Erro ao tentar logar. Tente novamente mais tarde.";
+            feedbackCssClass = "alert alert-danger";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+}
