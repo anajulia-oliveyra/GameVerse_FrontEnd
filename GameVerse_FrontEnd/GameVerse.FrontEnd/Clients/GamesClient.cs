@@ -1,15 +1,12 @@
 using System.Net.Http.Json;
 using GameVerse.FrontEnd.Models;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GameVerse.FrontEnd.Clients
 {
     public class GamesClient
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "https://gameverse.runasp.net/games";
+        private const string BaseUrl = "games";
 
         private List<GameSummary> _purchased = new();
 
@@ -46,8 +43,6 @@ namespace GameVerse.FrontEnd.Clients
             var response = await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
             response.EnsureSuccessStatusCode();
         }
-
-        // --- Métodos usados pelos componentes (adicionei agora) ---
 
         public async Task<GameSummary?> GetByIdAsync(int id)
         {

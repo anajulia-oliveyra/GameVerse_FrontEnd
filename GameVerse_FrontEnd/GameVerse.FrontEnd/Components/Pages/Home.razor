@@ -1,12 +1,18 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
 @inject GamesClient Client
+@inject AuthClient AuthClient
+@inject NavigationManager NavigationManager
 
 <PageTitle>GameCatalog</PageTitle>
 
 <div class="mt-2">
     <a class="btn btn-success" href="/login">Login</a>
     <a class="btn btn-success" href="/signup">Criar Conta</a>
-    <a class="btn btn-primary" href="/create">New Game</a>
+    <a class="btn btn-secondary" @onclick="Logout">Sair</a>
+    <AuthorizeView Roles="Admin">
+        <a class="btn btn-primary" href="/games">Administrador</a>
+    </AuthorizeView>
 </div>
 
 @if (games == null)
@@ -18,11 +24,10 @@ else
     <table class="table table-striped table-hover mt-3">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Genre</th>
-                <th class="text-end">Price</th>
-                <th>Release Date</th>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th class="text-end">Preço</th>
                 <th></th>
             </tr>
         </thead>
@@ -57,5 +62,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         games = await Client.GetGamesAsync();
+    }
+
+    private async Task Logout()
+    {
+        await AuthClient.LogoutAsync();
+        NavigationManager.NavigateTo("/", true);
     }
 }

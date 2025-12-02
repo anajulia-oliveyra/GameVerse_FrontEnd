@@ -23,6 +23,18 @@ namespace GameVerse.FrontEnd
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
             builder.Services.AddScoped<AuthStateProvider>();
             builder.Services.AddScoped<PaymentService>();
+            builder.Services.AddScoped<TokenHandler>();
+
+            builder.Services.AddHttpClient<GamesClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://gameverse.runasp.net/");
+            })
+            .AddHttpMessageHandler<TokenHandler>();
+
+            builder.Services.AddHttpClient<AuthClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://gameverse.runasp.net/");
+            });
 
 
             await builder.Build().RunAsync();
