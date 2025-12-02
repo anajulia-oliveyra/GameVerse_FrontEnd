@@ -69,6 +69,10 @@ public class GamesClient
     {
         return games.Where(g => purchasedGameIds.Contains(g.Id)).ToArray();
     }
+    public GameSummary? GetById(int id)
+    {
+        return games.SingleOrDefault(g => g.Id == id);
+    }
 
     public GameSummary[] GetGames() => games.ToArray();
 

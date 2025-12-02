@@ -1,0 +1,69 @@
+﻿@page "/confirmar/{id:int}"
+@using GameVerse.FrontEnd.Models
+@using GameVerse.FrontEnd.Clients
+
+@inject GamesClient GameService
+@inject PaymentService PaymentService
+@inject NavigationManager Nav
+
+<h1>Confirmar Compra</h1>
+
+@if (game == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <div class="card p-4">
+        <p><strong>Jogo:</strong> @game.Name</p>
+        <p><strong>Preço:</strong> R$ @game.Price</p>
+
+        @if (!processing)
+        {
+            <button class="btn btn-primary w-100 mb-2" @onclick="OnConfirmarCompra">
+                Confirmar compra
+            </button>
+
+            <button class="btn btn-secondary w-100" @onclick="Cancelar">
+                Cancelar
+            </button>
+        }
+        else
+        {
+            <p>Processando pagamento...</p>
+        }
+    </div>
+}
+
+@code {
+    GameSummary? game;
+    bool processing = false;
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override void OnInitialized()
+    {
+        game = GameService.GetById(id);
+    }
+
+    async Task OnConfirmarCompra()
+    {
+        processing = true;
+
+        var purchase = new Purchase
+        {
+            GameId = game.Id,
+            GameName = game.Name,
+            Price = game.Price,
+            UserEmail = "teste@email.com"
+        };
+
+        var result = await PaymentService.ProcessPayment(purchase);
+
+        if (result)
+            Nav.NavigateTo("/compra-sucesso", true);
+    }
+
+    void Cancelar() => Nav.NavigateTo("/");
+}
