@@ -34,6 +34,7 @@ else
         // falta implementar BuyGameAsync no GamesClient
         // então aqui fica vazio enquanto você cria
         Nav.NavigateTo("/", true);
+        await Task.CompletedTask; //TODO: Remove
     }
 
     private void GoBack()

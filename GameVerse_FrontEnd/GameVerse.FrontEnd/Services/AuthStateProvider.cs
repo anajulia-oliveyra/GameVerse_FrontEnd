@@ -45,8 +45,12 @@ namespace GameVerse.FrontEnd.Services
                 {
                     if (role is JsonElement roleElement && roleElement.ValueKind == JsonValueKind.Array)
                     {
-                        var parsedRoles = roleElement.Deserialize<string[]>();
-                        claims.AddRange(parsedRoles.Select(r => new Claim(ClaimTypes.Role, r)));
+                        string[]? parsedRoles = roleElement.Deserialize<string[]>();
+                        
+                        if(parsedRoles != null)
+                        {
+                            claims.AddRange(parsedRoles.Select(r => new Claim(ClaimTypes.Role, r)));
+                        }
                     }
                     else if (role != null)
                     {

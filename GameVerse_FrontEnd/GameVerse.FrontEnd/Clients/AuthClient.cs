@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using GameVerse.FrontEnd.Services;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebAuthorization;
 
 namespace GameVerse.FrontEnd.Clients
 {

@@ -62,7 +62,7 @@ else
                 @if (isSubmitting)
                 {
                     <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    Salvando...
+                    <p>Salvando...</p>
                 }
                 else
                 {
@@ -89,22 +89,7 @@ else
     private List<Genre>? genres;
     private string? errorMessage;
     private bool isSubmitting = false;
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            genres = new List<Genre>
-            {
-                new(1, "Platform"),
-                new(2, "Open World"),
-                new(3, "RPG")
-            };
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Erro ao carregar gêneros: {ex.Message}";
-        }
-    }
+    
     private async Task HandleSubmitAsync()
     {
         isSubmitting = true;

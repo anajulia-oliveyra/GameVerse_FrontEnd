@@ -36,7 +36,7 @@ else
                 {
                     <div class="@feedbackCssClass">@feedbackMessage</div>
                 }
-                <InputHidden @bind-Value="game.Id" /> 
+                <input type="hidden" @bind="game.Id" />
 
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome:</label>
@@ -72,7 +72,7 @@ else
                     @if (isSubmitting)
                     {
                         <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                        Salvando...
+                        <p>Salvando...</p>
                     }
                     else
                     {
@@ -86,10 +86,10 @@ else
 }
 
 @code{
-    [Parameter]
-    public int GameId { get; set; }
+    [Parameter]
+    public int GameId { get; set; }
 
-    private GameDetails? game;
+    private GameDetails? game;
     private List<Genre>? genres;
     private string? errorMessage;
     private string? feedbackMessage;
