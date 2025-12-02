@@ -10,7 +10,7 @@ namespace GameVerse.FrontEnd.Clients
         private readonly LocalStorageService _localStorageService;
         private readonly AuthStateProvider _authStateProvider;
         
-        private const string BaseUrl = "http://gameverse.runasp.net/auth";
+        private const string BaseUrl = "https://gameverse.runasp.net/auth";
 
         public record AuthData(string Email, string Password);
         public record AuthResponse(string Token, string? UserId); 

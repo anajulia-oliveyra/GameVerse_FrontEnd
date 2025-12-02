@@ -9,7 +9,7 @@ namespace GameVerse.FrontEnd.Clients
     public class GamesClient
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUrl = "http://gameverse.runasp.net/games";
+        private const string BaseUrl = "https://gameverse.runasp.net/games";
 
         private List<GameSummary> _purchased = new();
 
