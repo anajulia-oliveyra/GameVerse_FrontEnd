@@ -1,39 +1,92 @@
 ﻿@page "/signup"
 @using System.ComponentModel.DataAnnotations
+@using GameVerse.FrontEnd.Clients 
+@using Microsoft.AspNetCore.Components.Routing
+@inject AuthClient AuthClient
+@inject NavigationManager NavigationManager 
+// ... (outros using's)
 
-<PageTitle>New Game</PageTitle>
+<PageTitle>Cadastro de Usuário</PageTitle>
 
 <div class="card">
     <h4 class="card-header">Sign Up</h4>
     <div class="card-body">
         <EditForm Model="@formData" FormName="SignUpForm" OnValidSubmit="HandleSubmit">
             <DataAnnotationsValidator />
+            <ValidationSummary /> <div class="mb-3">
+                <InputText @bind-Value="formData.Username" placeholder="Nome" class="form-control" />
+                <ValidationMessage For="() => formData.Username" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <InputText @bind-Value="formData.Email" placeholder="Email" type="email" class="form-control" />
+                <ValidationMessage For="() => formData.Email" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <InputText @bind-Value="formData.Password" placeholder="Senha" type="password" class="form-control" />
+                <ValidationMessage For="() => formData.Password" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <InputText @bind-Value="formData.RepeatedPassword" placeholder="Repita a senha" type="password" class="form-control" />
+                <ValidationMessage For="() => formData.RepeatedPassword" class="text-danger" />
+            </div>
 
             <div class="mb-3">
-                <InputText @bind-Value="formData.Username" placeholder="Nome" />
-            </div>
-            <div class="mb-3">
-                <InputText @bind-Value="formData.Email" placeholder="Email" type="email" />
-            </div>
-            <div class="mb-3">
-                <InputText @bind-Value="formData.Password" placeholder="Senha" type="password" />
-            </div>
-            <div class="mb-3">
-                <InputText @bind-Value="formData.RepeatedPassword" placeholder="Repita a senha" type="password" />
-            </div>
-
-            <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Cadastrar</button>
+                <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
+                    @if (isSubmitting)
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Cadastrando...
+                    }
+                    else
+                    {
+                        <span>Cadastrar</span>
+                    }
+                </button>
             </div>
 
-            <p>Dados inseridos: @insertedData</p>
+            @if (!string.IsNullOrEmpty(feedbackMessage))
+            {
+                <div class="@feedbackCssClass">@feedbackMessage</div>
+            }
         </EditForm>
     </div>
 </div>
 
 @code {
     private SignUpFormData formData = new();
-    private string insertedData = "";
+    private bool isSubmitting = false;
+    private string feedbackMessage = string.Empty;
+    private string feedbackCssClass = string.Empty;
+
+    public class PasswordMatchAttribute : ValidationAttribute
+    {
+        private readonly string _comparisonProperty;
+
+        public PasswordMatchAttribute(string comparisonProperty)
+        {
+            _comparisonProperty = comparisonProperty;
+        }
+
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+        {
+            var repeatedPassword = value?.ToString();
+            var passwordProperty = validationContext.ObjectType.GetProperty(_comparisonProperty);
+
+            if (passwordProperty == null)
+            {
+                throw new ArgumentException($"Propriedade de comparação '{_comparisonProperty}' não encontrada.");
+            }
+
+            var password = passwordProperty.GetValue(validationContext.ObjectInstance)?.ToString();
+
+            if (repeatedPassword != password)
+            {
+                return new ValidationResult(ErrorMessage ?? "As senhas não coincidem.", new[] { validationContext.MemberName! });
+            }
+
+            return ValidationResult.Success!;
+        }
+    }
 
     private class SignUpFormData
     {
@@ -41,17 +94,46 @@
         public string Username { get; set; } = "";
 
         [Required(ErrorMessage = "O campo email é obrigatório.")]
+        [EmailAddress(ErrorMessage = "Formato de email inválido.")]
         public string Email { get; set; } = "";
 
         [Required(ErrorMessage = "O campo senha é obrigatório.")]
+        [MinLength(6, ErrorMessage = "A senha deve ter no mínimo 6 caracteres.")]
         public string Password { get; set; } = "";
 
         [Required(ErrorMessage = "O campo repetir senha é obrigatório.")]
+        [PasswordMatch(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
         public string RepeatedPassword { get; set; } = "";
     }
-
-    private void HandleSubmit()
+    private async Task HandleSubmit()
     {
-        insertedData = $"{formData.Username}, {formData.Email}, {formData.Password}";
+        isSubmitting = true;
+        feedbackMessage = string.Empty;
+        feedbackCssClass = string.Empty;
+
+        try
+        {
+            var response = await AuthClient.SignInAsync(formData.Email, formData.Password);
+
+            feedbackMessage = "Cadastro realizado com sucesso! Redirecionando para o Login...";
+            feedbackCssClass = "alert alert-success";
+
+            await Task.Delay(2000);
+            NavigationManager.NavigateTo("/login");
+        }
+        catch (HttpRequestException ex)
+        {
+            feedbackMessage = $"Erro ao cadastrar. Tente com outro email ou entre em contato. Detalhe: {ex.StatusCode}";
+            feedbackCssClass = "alert alert-danger";
+        }
+        catch (Exception ex)
+        {
+            feedbackMessage = $"Erro inesperado: {ex.Message}";
+            feedbackCssClass = "alert alert-danger";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
     }
 }
