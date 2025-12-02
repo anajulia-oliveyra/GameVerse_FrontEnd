@@ -15,8 +15,8 @@ namespace GameVerse.FrontEnd
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton<GamesClient>();
-            builder.Services.AddSingleton<PaymentService>();
+            builder.Services.AddScoped<GamesClient>();
+            builder.Services.AddScoped<PaymentService>();
 
 
             await builder.Build().RunAsync();
