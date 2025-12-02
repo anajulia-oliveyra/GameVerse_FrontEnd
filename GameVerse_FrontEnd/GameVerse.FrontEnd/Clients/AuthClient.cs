@@ -31,7 +31,7 @@ namespace GameVerse.FrontEnd.Clients
                 Password = password
             };
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{BaseUrl}/signup", data);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"{BaseUrl}/signin", data);
 
             response.EnsureSuccessStatusCode();
 

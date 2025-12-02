@@ -6,24 +6,6 @@
 
 <PageTitle>GameCatalog</PageTitle>
 
-<div class="mt-2">
-    <AuthorizeView>
-        <Authorized>
-            <a class="btn btn-secondary" @onclick="Logout">Sair</a>
-            <a class="btn btn-secondary" href="/user/games">Meus jogos</a>
-
-        </Authorized>
-        <NotAuthorized>
-            <a class="btn btn-success" href="/login">Login</a>
-            <a class="btn btn-success" href="/signup">Criar Conta</a>
-        </NotAuthorized>
-    </AuthorizeView>
-
-    <AuthorizeView Roles="Admin">
-        <a class="btn btn-primary" href="/games">Administrador</a>
-    </AuthorizeView>
-</div>
-
 @if (games == null || purchasedGames == null)
 {
     <p><em>Carregando...</em></p>
@@ -56,7 +38,11 @@ else
                         }
                         else
                         {
-                            <a class="btn btn-success btn-sm" href="/confirmar/@game.Id">Comprar</a>
+                            <AuthorizeView>
+                                <Authorized>
+                                <a class="btn btn-success btn-sm" href="/confirmar/@game.Id">Comprar</a>
+                                </Authorized>
+                            </AuthorizeView>
                         }
                     </td>
                 </tr>

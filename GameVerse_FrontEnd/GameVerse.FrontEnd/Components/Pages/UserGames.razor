@@ -2,6 +2,7 @@
 @inject GamesClient Client
 @inject NavigationManager Navigation
 @using GameVerse.FrontEnd.Models
+@using Microsoft.AspNetCore.Components.Authorization
 
 <h3>Meus Jogos</h3>
 
@@ -15,15 +16,34 @@ else if (!games.Any())
 }
 else
 {
-    <ul class="list-group">
-        @foreach (var game in games)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                @game.Name
-                <button class="btn btn-danger btn-sm" @onclick="() => RemoveGame(game.Id)">Remover</button>
-            </li>
-        }
-    </ul>
+    <table class="table table-striped table-hover mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th class="text-end">Preço</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var game in games)
+            {
+                <tr>
+                    <td>@game.Id</td>
+                    <td>@game.Name</td>
+                    <td>@game.Description</td>
+                    <td class="text-end">@game.Price.ToString("C2")</td>
+                    <td>
+                        <AuthorizeView Roles="Admin">
+                            <button class="btn btn-danger btn-sm" @onclick="() => RemoveGame(game.Id)">Remover</button>
+                        </AuthorizeView>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
@@ -43,15 +63,8 @@ else
 
     private async Task RemoveGame(int gameId)
     {
-        try
-        {
-            await Client.RemoveUserGameAsync(gameId);
-            games?.RemoveAll(g => g.Id == gameId);
-            StateHasChanged();
-        }
-        catch
-        {
-            Navigation.NavigateTo("/login");
-        }
+        await Client.RemoveUserGameAsync(gameId);
+        games?.RemoveAll(g => g.Id == gameId);
+        StateHasChanged();
     }
 }
