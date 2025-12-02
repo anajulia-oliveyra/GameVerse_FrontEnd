@@ -75,7 +75,7 @@
         try
         {
             await GamesClient.CreateGameAsync(game);
-            NavigationManager.NavigateTo("/games");
+            NavigationManager.NavigateTo("games");
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Forbidden || ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
         {

@@ -72,6 +72,6 @@ else
     private async Task Logout()
     {
         await AuthClient.LogoutAsync();
-        NavigationManager.NavigateTo("/", true);
+        NavigationManager.NavigateTo("", true);
     }
 }

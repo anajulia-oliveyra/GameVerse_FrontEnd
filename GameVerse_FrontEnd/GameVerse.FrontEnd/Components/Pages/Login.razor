@@ -78,7 +78,7 @@
 
             await Task.Delay(1500);
             
-            NavigationManager.NavigateTo("/"); 
+            NavigationManager.NavigateTo(""); 
         }
         catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized || ex.StatusCode == System.Net.HttpStatusCode.Forbidden)
         {
