@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "GameVerse.FrontEnd",
   "resources": {
-    "hash": "sha256-opoFr/c6SsACCMEdyWt1JoU+2eI7Nj/aoRpgGWccqLg=",
+    "hash": "sha256-b75ieuRv4kv79DYDaocjBteXdehQnWSrVOp74ZlOG/k=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-IxwaIDjiR5zsnCDCDYzAREWxGWUXFNBMBm1sr+wsebo="
     },
@@ -9,7 +9,7 @@
       "dotnet.runtime.js": "sha256-6bV/iAemowb59rmItegP8VsxwWpWUNyMb0Q76Fvvsjo="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-WI5RVgggCOnSfwHRydTor4hGrILg3t0AbD/TsDcIVE8="
+      "dotnet.native.wasm": "sha256-Pt6OtejJpLG9qkVtaMNavLR2uidklax9DxVRW93aD80="
     },
     "icu": {
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
