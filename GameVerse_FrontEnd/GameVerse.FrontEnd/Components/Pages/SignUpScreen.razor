@@ -1,7 +1,6 @@
 ﻿@page "/signup"
 @using System.ComponentModel.DataAnnotations
 @using GameVerse.FrontEnd.Clients
-@using Microsoft.AspNetCore.Components.Routing
 @inject AuthClient AuthClient
 @inject NavigationManager NavigationManager
 
@@ -10,7 +9,7 @@
 <div class="card">
     <h4 class="card-header">Sign Up</h4>
     <div class="card-body">
-        <EditForm Model="@formData" FormName="SignUpForm" OnValidSubmit="HandleSubmit">
+        <EditForm Model="@formData" OnValidSubmit="HandleSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
 
@@ -36,7 +35,7 @@
                     @if (isSubmitting)
                     {
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        <p>Cadastrando...</p>
+                        <span> Cadastrando...</span>
                     }
                     else
                     {
@@ -59,36 +58,6 @@
     private string feedbackMessage = string.Empty;
     private string feedbackCssClass = string.Empty;
 
-    public class PasswordMatchAttribute : ValidationAttribute
-    {
-        private readonly string _comparisonProperty;
-
-        public PasswordMatchAttribute(string comparisonProperty)
-        {
-            _comparisonProperty = comparisonProperty;
-        }
-
-        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
-        {
-            var repeatedPassword = value?.ToString();
-            var passwordProperty = validationContext.ObjectType.GetProperty(_comparisonProperty);
-
-            if (passwordProperty == null)
-            {
-                throw new ArgumentException($"Propriedade '{_comparisonProperty}' não encontrada.");
-            }
-
-            var password = passwordProperty.GetValue(validationContext.ObjectInstance)?.ToString();
-
-            if (repeatedPassword != password)
-            {
-                return new ValidationResult(ErrorMessage ?? "As senhas não coincidem.", new[] { validationContext.MemberName! });
-            }
-
-            return ValidationResult.Success!;
-        }
-    }
-
     private class SignUpFormData
     {
         [Required(ErrorMessage = "O campo nome é obrigatório.")]
@@ -103,7 +72,7 @@
         public string Password { get; set; } = "";
 
         [Required(ErrorMessage = "O campo repetir senha é obrigatório.")]
-        [PasswordMatch(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
+        [Compare(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
         public string RepeatedPassword { get; set; } = "";
     }
 
@@ -115,11 +84,7 @@
 
         try
         {
-            var response = await AuthClient.SignUpAsync(
-                formData.Username,
-                formData.Email,
-                formData.Password
-            );
+            await AuthClient.SignUpAsync(formData.Username, formData.Email, formData.Password);
 
             feedbackMessage = "Cadastro realizado com sucesso! Redirecionando para o Login...";
             feedbackCssClass = "alert alert-success";
@@ -127,9 +92,9 @@
             await Task.Delay(2000);
             NavigationManager.NavigateTo("/login");
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
-            feedbackMessage = $"Erro ao cadastrar. Detalhe: {ex.StatusCode}";
+            feedbackMessage = "Erro ao cadastrar. Verifique suas informações ou tente novamente.";
             feedbackCssClass = "alert alert-danger";
         }
         catch (Exception ex)
