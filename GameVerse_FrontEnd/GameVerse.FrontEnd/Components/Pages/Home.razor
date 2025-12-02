@@ -32,9 +32,8 @@ else
             <tr>
                 <td>@game.Id</td>
                 <td>@game.Name</td>
-                <td>@game.Genre</td>
+                <td>@game.Description</td>
                 <td class="text-end">@game.Price.ToString("C2")</td>
-                <td>@game.ReleaseDate</td>
                 <td>
                     @if (Client.GetPurchasedGames().Any(g => g.Id == game.Id))
                     {

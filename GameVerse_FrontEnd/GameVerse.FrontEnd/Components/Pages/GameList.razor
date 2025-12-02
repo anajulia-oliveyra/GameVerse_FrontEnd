@@ -51,9 +51,8 @@ else
                 <tr>
                     <td>@game.Id</td>
                     <td>@game.Name</td>
-                    <td>@game.Genre</td>
+                    <td>@game.Description</td>
                     <td>@game.Price.ToString("C2")</td> 
-                    <td>@game.ReleaseDate.ToString("yyyy/MM/dd")</td>
                     <td>
                         <AuthorizeView Roles="Admin">
                             <button class="btn btn-sm btn-info me-2" @onclick="() => NavigateToEdit(game.Id)">Editar</button>

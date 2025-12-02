@@ -6,17 +6,9 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject GamesClient GamesClient
-@inject GenresClient GenresClient
-
 <PageTitle>Novo Jogo</PageTitle>
 <h3>Criar Novo Jogo</h3>
 
-@if(genres is null)
-{
-  <p class="alert alert-info"><em>Carregando gêneros...</em></p>
-}
-else
-{
 <div class="row">
     <div class="col-md-6">
         <EditForm Model="@game" FormName="createGame" OnValidSubmit="HandleSubmitAsync">
@@ -33,29 +25,17 @@ else
                 <InputText id="name" @bind-Value="game.Name" class="form-control" />
                 <ValidationMessage For="() => game.Name" />
             </div>
-            
+
             <div class="mb-3">
-                <label for="genre" class="form-label">Gênero:</label>
-                <InputSelect id="genre" @bind-Value="game.GenreId" class="form-select">
-                    <option value="">Selecione um Gênero</option>
-                    @foreach (var genre in genres)
-                    {
-                        <option value="@genre.Id">@genre.Name</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="() => game.GenreId" />
+                <label for="description" class="form-label">Descrição:</label>
+                <InputText id="description" @bind-Value="game.Description" class="form-control" />
+                <ValidationMessage For="() => game.Description" />
             </div>
             
             <div class="mb-3">
                 <label for="price" class="form-label">Preço:</label>
                 <InputNumber id="price" @bind-Value="game.Price" class="form-control" />
                 <ValidationMessage For="() => game.Price" />
-            </div>
-            
-            <div class="mb-3">
-                <label for="releaseDate" class="form-label">Data de Lançamento:</label>
-                <InputDate id="releaseDate" @bind-Value="game.ReleaseDate" class="form-control" />
-                <ValidationMessage For="() => game.ReleaseDate" />
             </div>
             
             <button type="submit" class="btn btn-primary" disabled="@isSubmitting">
@@ -73,7 +53,6 @@ else
         </EditForm>
     </div>
 </div>
-}
 
 @code{
 
@@ -81,12 +60,10 @@ else
     private GameDetails game {get;set;} = new(){
         Id = 0, 
         Name = string.Empty,
-        GenreId = string.Empty, 
-        Price = 0,
-        ReleaseDate = DateOnly.FromDateTime(DateTime.UtcNow)
+        Description = string.Empty, 
+        Price = 0
     };
     private record Genre(int Id, string Name);
-    private List<Genre>? genres;
     private string? errorMessage;
     private bool isSubmitting = false;
     
