@@ -13,14 +13,60 @@
 </head>
 
 <body>
-    <div id="app">
-        <svg class="loading-progress">
-            <circle r="40%" cx="50%" cy="50%" />
-            <circle r="40%" cx="50%" cy="50%" />
-        </svg>
-        <div class="loading-progress-text"></div>
+    <div id="blazor-loader">
+        <div class="spinner"></div>
     </div>
+
+    <div id="app"></div>
+
+    <style>
+        #blazor-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: white;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 10px solid rgba(0,0,0,0.1);
+            border-top-color: #0078d7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
     <script src="_framework/blazor.webassembly.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            waitForBlazorStart();
+        });
+
+        function waitForBlazorStart() {
+            if (document.getElementById('app').innerHTML.trim() !== '') {
+                const loader = document.getElementById('blazor-loader');
+                if (loader) loader.remove();
+                return;
+            }
+
+            requestAnimationFrame(waitForBlazorStart);
+        }
+    </script>
 </body>
 
 </html>
